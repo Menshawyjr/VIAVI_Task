@@ -1,12 +1,11 @@
 package pages;
 
+import java.time.Duration;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
-import java.util.List;
 
 public class BasePage {
     protected WebDriver driver;
@@ -14,7 +13,7 @@ public class BasePage {
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(60)); // Increased to 60 seconds
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(60));
     }
 
     // More robust method to wait for shop to load
@@ -36,10 +35,6 @@ public class BasePage {
             By keyElements = By.cssSelector("a, button, input, .product");
             wait.until(ExpectedConditions.elementToBeClickable(keyElements));
             System.out.println("Key elements are clickable");
-
-            // Strategy 4: Additional safety wait
-            Thread.sleep(3000);
-            System.out.println("Additional safety wait completed");
 
         } catch (Exception e) {
             System.out.println("Shop loading wait completed with exception: " + e.getMessage());

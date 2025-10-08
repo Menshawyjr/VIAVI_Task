@@ -182,7 +182,7 @@ public class AuthenticationPage extends BasePage {
             System.out.println("Customer privacy checkbox not found");
         }
 
-        // Terms and conditions (usually required)
+        // Terms and conditions
         try {
             WebElement terms = driver.findElement(termsCheckbox);
             if (!terms.isSelected()) {

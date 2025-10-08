@@ -1,22 +1,22 @@
 package tests;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
-import org.testng.Assert;
+import pages.CartPage;
 import pages.HomePage;
 import pages.LoginPage;
-import pages.AuthenticationPage;
 import pages.SearchPage;
 import pages.ProductPage;
-import pages.CartPage;
-import utils.WebDriverFactory;
+import org.testng.Assert;
 import java.time.Duration;
+import org.openqa.selenium.By;
+import utils.WebDriverFactory;
+import pages.AuthenticationPage;
+import org.testng.annotations.Test;
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class PrestaShopTest {
     private WebDriver driver;
@@ -26,19 +26,16 @@ public class PrestaShopTest {
     public void setUp() {
         driver = WebDriverFactory.createDriver();
         wait = new WebDriverWait(driver, Duration.ofSeconds(60));
-
         System.out.println("Opening PrestaShop demo site...");
         driver.get("https://demo.prestashop.com/");
-
         // Use multiple wait strategies
         waitForShopToLoadCompletely();
     }
 
     private void waitForShopToLoadCompletely() {
         System.out.println("Waiting for shop to be fully available...");
-
         try {
-            // Wait for the iframe to load (PrestaShop demo uses iframes)
+            // Wait for the iframe to load
             wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("iframe")));
             System.out.println("Iframe detected");
 
@@ -70,10 +67,6 @@ public class PrestaShopTest {
             });
             System.out.println("Page is interactive");
 
-            // Additional wait for content
-            Thread.sleep(5000);
-            System.out.println("Shop is now fully loaded and ready");
-
         } catch (Exception e) {
             System.out.println("Shop loading completed with exception: " + e.getMessage());
             // Continue anyway
@@ -83,7 +76,6 @@ public class PrestaShopTest {
     @Test
     public void testCompleteScenario() throws InterruptedException {
         System.out.println("=== Starting Complete Test Scenario ===");
-
         HomePage homePage = new HomePage(driver);
 
         // Step 2: Create an account
@@ -116,10 +108,8 @@ public class PrestaShopTest {
         // Step 4: Select the first search result and assert that it has an image
         System.out.println("--- Step 4: Selecting First Product and Verifying Image ---");
         ProductPage productPage = searchPage.selectFirstProduct();
-
         String productName = productPage.getProductName();
         System.out.println("Product page opened: " + productName);
-
         boolean hasImage = productPage.hasProductImage();
         Assert.assertTrue(hasImage, "Product should have an image");
         System.out.println("✓ Product image verification passed");
@@ -138,13 +128,10 @@ public class PrestaShopTest {
         System.out.println("--- Step 7: Verifying Product in Cart ---");
         boolean isInCart = cartPage.isProductInCart();
         Assert.assertTrue(isInCart, "Product should be in cart");
-
         int itemCount = cartPage.getCartItemCount();
         Assert.assertTrue(itemCount > 0, "Cart should have items");
-
         String cartProductName = cartPage.getFirstProductName();
         System.out.println("Product in cart: " + cartProductName);
-
         System.out.println("✓ Cart verification passed. Items in cart: " + itemCount);
         System.out.println("=== Complete Test Scenario Finished Successfully! ===");
     }
